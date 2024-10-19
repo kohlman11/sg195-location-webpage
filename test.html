@@ -20,8 +20,8 @@
 </head>
 <body>
 
-<h1>Real-Time CSV Data</h1>
-<p>This table displays data from a CSV file without clearing previous content.</p>
+<h1>CSV Data: Latitude and Longitude</h1>
+<p>This table displays the latitude and longitude from the CSV file.</p>
 
 <table id="csvTable">
     <thead>
@@ -49,17 +49,17 @@
                 const headers = rows[0];
                 headers.forEach(header => {
                     const th = document.createElement('th');
-                    th.textContent = header;
+                    th.textContent = header.trim();  // Remove any leading/trailing spaces
                     tableHeader.appendChild(th);
                 });
             }
 
-            // Append the data rows without clearing the previous ones
+            // Append the data rows without clearing previous ones
             rows.slice(1).forEach(row => {
                 const tr = document.createElement('tr');
                 row.forEach(cell => {
                     const td = document.createElement('td');
-                    td.textContent = cell;
+                    td.textContent = cell.trim();  // Remove any leading/trailing spaces
                     tr.appendChild(td);
                 });
                 tableBody.appendChild(tr);
