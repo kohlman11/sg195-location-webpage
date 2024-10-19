@@ -21,7 +21,7 @@
 <body>
 
 <h1>Real-Time CSV Data</h1>
-<p>This table displays real-time data from a CSV file.</p>
+<p>This table displays data from a CSV file without clearing previous content.</p>
 
 <table id="csvTable">
     <thead>
@@ -31,10 +31,10 @@
 </table>
 
 <script>
-    // Function to fetch and update the CSV data
+    // Function to fetch and append CSV data
     async function fetchCSVData() {
         try {
-            const response = await fetch('test.csv');  // Ensure the path to the CSV file is correct
+            const response = await fetch('data.csv');  // Ensure the path to the CSV file is correct
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -44,19 +44,17 @@
             const tableHeader = document.getElementById('tableHeader');
             const tableBody = document.getElementById('tableBody');
 
-            // Clear the existing table
-            tableHeader.innerHTML = '';
-            tableBody.innerHTML = '';
+            // Append headers only once, if the table is empty
+            if (tableHeader.innerHTML === '') {
+                const headers = rows[0];
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    tableHeader.appendChild(th);
+                });
+            }
 
-            // Add header from the first row
-            const headers = rows[0];
-            headers.forEach(header => {
-                const th = document.createElement('th');
-                th.textContent = header;
-                tableHeader.appendChild(th);
-            });
-
-            // Add data rows
+            // Append the data rows without clearing the previous ones
             rows.slice(1).forEach(row => {
                 const tr = document.createElement('tr');
                 row.forEach(cell => {
@@ -71,8 +69,9 @@
         }
     }
 
-    // Fetch the data initially
+    // Fetch the data initially and set up periodic updates (optional)
     fetchCSVData();
+    setInterval(fetchCSVData, 5000);  // Optional: Update every 5 seconds
 </script>
 
 </body>
